@@ -7,7 +7,7 @@ import { delay } from 'rxjs';
 })
 export class ProfileService {
 
-  private userProfile = { firstName: 'David', lastName: 'Tchintcharauli'}
+  private userProfile = { firstName: 'David', lastName: 'Tchintcharauli', email: 'Tchincharaulidavid@gmail.com', phone: 591161785}
   private userProfileSubject = new BehaviorSubject(this.userProfile)
 
   constructor() { }

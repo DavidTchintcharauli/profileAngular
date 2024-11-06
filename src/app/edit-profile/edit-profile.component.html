@@ -37,6 +37,23 @@
             <div *ngIf="profileForm.controls['lastName']?.invalid && profileForm.controls['lastName']?.touched"
                 class="text-red-500 text-sm mt-1">Last name is required.</div>
         </div>
+        <div class="form-group">
+            <label for="email" class="block text-lg font-medium text-gray-800">Email Address</label>
+            <input id="email" type="email" class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300"
+                [(ngModel)]="email" name="email" placeholder="Enter your email" required [email]="true" />
+            <div *ngIf="profileForm.controls['email']?.invalid && profileForm.controls['email']?.touched" class="text-red-500 text-sm mt-1">
+                <div *ngIf="profileForm.controls['email']?.errors?.['required']">Email is required.</div>
+                <div *ngIf="profileForm.controls['email']?.errors?.['email']">Please enter a valid email address.</div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label for="phone" class="block text-lg font-medium text-gray-800">Phone Number (Optional)</label>
+            <input id="phone" type="text" class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300"
+                [(ngModel)]="phone" name="phone" placeholder="Enter your phone number (optional)" pattern="^[0-9]*$" />
+            <div *ngIf="profileForm.controls['phone']?.invalid && profileForm.controls['phone']?.touched" class="text-red-500 text-sm mt-1">
+                <div *ngIf="profileForm.controls['phone']?.errors?.['pattern']">Please enter a valid phone number (only numbers).</div>
+            </div>
+        </div>
         <div *ngIf="isLoader" class="inline-flex items-center justify-center w-full">
             <button type="button"
                 class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed"
