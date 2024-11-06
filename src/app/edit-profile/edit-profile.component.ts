@@ -5,20 +5,17 @@ import { ProfileService } from '../services/profile.service';
 import { Router } from '@angular/router';
 import { ProfileComponent } from "../profile/profile.component";
 import { ReactiveFormsModule, Validators } from '@angular/forms';
+import { NotificationService } from '../services/notification.service';
+import { ToastComponent } from "../toast/toast.component";
 
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [FormsModule, CommonModule, ProfileComponent],
+  imports: [FormsModule, CommonModule, ProfileComponent, ToastComponent],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css'
 })
 export class EditProfileComponent implements OnInit{
-
-  // profileForm = new FormGroup({
-  //   firstName: new FormGroup('', Validators.required),
-  //   lastName: new FormGroup('', Validators.required)
-  // })
 
   firstName = ''
   lastName = '';
@@ -27,7 +24,10 @@ export class EditProfileComponent implements OnInit{
   isLoader: boolean = false;
   isFetchingData: boolean = true;
 
-  constructor(private profileService: ProfileService, private router: Router) {}
+  successMessage = ''
+  errorMessage = ''
+
+  constructor(private profileService: ProfileService, private router: Router, private notificationService: NotificationService) {}
 
   ngOnInit() {
     this.profileService.getProfile().subscribe(profile => {
@@ -49,17 +49,19 @@ export class EditProfileComponent implements OnInit{
       };
       this.profileService.updateProfile(updatedProfile).subscribe(
         response => {
-          console.log('Profile updated successfully:', response);
-          this.router.navigate(['/profile']);
+          this.notificationService.showToast('Profile updated successfully!', 'success', 5000);
+       
+            this.router.navigate(['/profile']);
+          
           this.isLoader = false;
         },
         error => {
-          console.error('Error updating profile:', error);
+          this.notificationService.showToast('An error occurred while updating the profile. Please try again.', 'error');
           this.isLoader = false;
         }
       );
     } else {
-      console.log('No changes detected.');
+      this.notificationService.showToast('There are no changes to save. Please make changes or click on the Cancel button.', 'error', 5000);
     }
   }
 

@@ -14,13 +14,19 @@
             Loading...
         </button>
     </div>
+    <div *ngIf="successMessage" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+        <p class="font-semibold">{{ successMessage }}</p>
+    </div>
+    <div *ngIf="errorMessage" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+        <p class="font-semibold">{{ errorMessage }}</p>
+    </div>
     <form (ngSubmit)="saveProfile()" #profileForm="ngForm" class="space-y-6">
         <div class="form-group">
             <label for="firstName" class="block text-lg font-medium text-gray-800">First Name</label>
             <input id="firstName" type="text"
                 class="w-full p-3 mt-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:border-indigo-500 transition duration-300"
                 [(ngModel)]="firstName" name="firstName" placeholder="Enter your first name" required />
-            <div *ngIf="profileForm.controls['firstName']?.invalid && profileForm.controls['firstName']?.touched" 
+            <div *ngIf="profileForm.controls['firstName']?.invalid && profileForm.controls['firstName']?.touched"
                 class="text-red-500 text-sm mt-1">First name is required.</div>
         </div>
         <div class="form-group">
