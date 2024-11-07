@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay } from 'rxjs';
-import {Profile} from '../model/profile.model';
+import { Profile } from '../model/profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -9,7 +9,7 @@ import {Profile} from '../model/profile.model';
 
 export class ProfileService {
 
-  private profile: Profile = { firstName: 'David', lastName: 'Tchintcharauli', email: 'Tchincharaulidavid@gmail.com', phone: '591161785', profilePicture: 'https://via.placeholder.com/150'}
+  private profile: Profile = { firstName: 'David', lastName: 'Tchintcharauli', email: 'Tchincharaulidavid@gmail.com', phone: '591161785', profilePicture: 'https://via.placeholder.com/150' }
   private userProfileSubject = new BehaviorSubject(this.profile)
 
   getProfile(): Observable<Profile> {
@@ -17,7 +17,7 @@ export class ProfileService {
   }
 
   updateProfile(updatedProfile: Profile, profilePicture: File | null): Observable<Profile> {
-    if(profilePicture) {
+    if (profilePicture) {
       const mockImageUrl = URL.createObjectURL(profilePicture)
       updatedProfile.profilePicture = mockImageUrl
     }

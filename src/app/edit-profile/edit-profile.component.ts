@@ -1,11 +1,11 @@
-import {Component, OnInit, NgModule, inject, DestroyRef} from '@angular/core';
-import { FormGroup, FormBuilder, FormsModule, Validators, ReactiveFormsModule, MinLengthValidator} from '@angular/forms';
+import { Component, OnInit, NgModule, inject, DestroyRef } from '@angular/core';
+import { FormGroup, FormBuilder, FormsModule, Validators, ReactiveFormsModule, MinLengthValidator } from '@angular/forms';
 import { ProfileService } from '../services/profile.service';
 import { Router } from '@angular/router';
 import { ProfileComponent } from "../profile/profile.component"
 import { NotificationService } from '../services/notification.service'
 import { ToastComponent } from "../toast/toast.component"
-import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-edit-profile',
@@ -38,7 +38,7 @@ export class EditProfileComponent implements OnInit {
     this.profileForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email, ]],
+      email: ['', [Validators.required, Validators.email,]],
       phone: ['', [Validators.pattern('^[0-9]{9}$')]],
       profilePicture: [null]
     });
@@ -53,11 +53,11 @@ export class EditProfileComponent implements OnInit {
       });
       this.isFetchingData = false
     },
-    (error) => {
-      this.errorMessage = 'Failed to load profile data. Please try again.';
-      this.isFetchingData = false;
-    }
-  );
+      (error) => {
+        this.errorMessage = 'Failed to load profile data. Please try again.';
+        this.isFetchingData = false;
+      }
+    );
   }
 
   onFileChange(event: any): void {

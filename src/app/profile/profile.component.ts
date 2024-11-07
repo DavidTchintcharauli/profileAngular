@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
 import { Profile } from '../model/profile.model';
 import { Observable } from 'rxjs';
-import {AsyncPipe} from '@angular/common';
+import { AsyncPipe } from '@angular/common';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +13,7 @@ import {AsyncPipe} from '@angular/common';
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
-export class ProfileComponent implements OnInit{
+export class ProfileComponent implements OnInit {
   userProfile$!: Observable<Profile>;
 
   private router = inject(Router)
@@ -24,6 +24,6 @@ export class ProfileComponent implements OnInit{
   }
 
   navigateToEditProfile() {
-      this.router.navigate(['/edit-profile'])
+    this.router.navigate(['/edit-profile'])
   }
 }

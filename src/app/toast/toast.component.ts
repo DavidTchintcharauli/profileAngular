@@ -1,7 +1,8 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { Subscription } from 'rxjs';
-import { NotificationService, Toast } from '../services/notification.service';
+import { NotificationService } from '../services/notification.service';
 import { CommonModule } from '@angular/common';
+import { Toast } from '../model/toast.model';
 
 @Component({
   selector: 'app-toast',
@@ -21,7 +22,7 @@ export class ToastComponent implements OnInit, OnDestroy {
       this.toast = toast
       setTimeout(() => {
         this.toast = null
-      }, toast.duration)
+      }, toast!.duration)
     })
   }
 
