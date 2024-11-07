@@ -1,6 +1,5 @@
-import { Component, OnInit, NgModule} from '@angular/core';
+import { Component, OnInit, NgModule, inject} from '@angular/core';
 import { FormGroup, FormBuilder, FormsModule, Validators, ReactiveFormsModule} from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { ProfileService } from '../services/profile.service';
 import { Router } from '@angular/router';
 import { ProfileComponent } from "../profile/profile.component"
@@ -10,7 +9,7 @@ import { ToastComponent } from "../toast/toast.component"
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [FormsModule, CommonModule, ProfileComponent, ToastComponent, ReactiveFormsModule],
+  imports: [FormsModule, ProfileComponent, ToastComponent, ReactiveFormsModule],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css'
 })
@@ -28,7 +27,10 @@ export class EditProfileComponent implements OnInit {
   imageName = ''
   imageSize: number = 0
 
-  constructor(private fb: FormBuilder, private profileService: ProfileService, private router: Router, private notificationService: NotificationService) { }
+  private fb = inject(FormBuilder);
+  private profileService = inject(ProfileService);
+  private router = inject(Router);
+  private notificationService = inject(NotificationService);
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
@@ -45,7 +47,6 @@ export class EditProfileComponent implements OnInit {
         email: profile.email,
         phone: profile.phone || ''
       });
-
       this.isFetchingData = false
     },
     (error) => {
@@ -69,7 +70,7 @@ export class EditProfileComponent implements OnInit {
         this.imagePreview = e.target?.result as string
       }
       reader.readAsDataURL(file)
-
+      
       this.imageName = file.name
       this.imageSize = Math.round(file.size / 1024)
       this.selectedFile = file

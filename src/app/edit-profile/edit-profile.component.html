@@ -1,6 +1,7 @@
 <div class="max-w-2xl mx-auto p-6 bg-white shadow-lg rounded-lg">
     <h2 class="text-3xl font-extrabold text-gray-900 text-center mb-8">Edit Profile</h2>
-    <div *ngIf="isFetchingData" class="inline-flex items-center justify-center w-full">
+    @if (isFetchingData) {
+    <div class="inline-flex items-center justify-center w-full">
         <button type="button"
             class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed"
             disabled>
@@ -14,64 +15,84 @@
             Loading...
         </button>
     </div>
-    <div *ngIf="successMessage" class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
+    }
+    @if (successMessage) {
+    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
         <p class="font-semibold">{{ successMessage }}</p>
     </div>
-    <div *ngIf="errorMessage" class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
+    }
+    @if (errorMessage) {
+    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
         <p class="font-semibold">{{ errorMessage }}</p>
     </div>
+    }
     <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="space-y-6">
         <div class="form-group">
             <label for="firstName" class="block text-lg font-medium text-gray-800">First Name</label>
             <input id="firstName" type="text" class="w-full p-3 mt-2 border border-gray-300 rounded-lg"
-              formControlName="firstName" placeholder="Enter your first name" />
-            <div *ngIf="profileForm.controls['firstName'].invalid && profileForm.controls['firstName'].touched" class="text-red-500 text-sm mt-1">
-              First name is required.
+                formControlName="firstName" placeholder="Enter your first name" />
+            @if (profileForm.controls['firstName'].invalid && profileForm.controls['firstName'].touched) {
+            <div class="text-red-500 text-sm mt-1">
+                First name is required.
             </div>
-          </div>
-      
-          <div class="form-group">
+            }
+        </div>
+        <div class="form-group">
             <label for="lastName" class="block text-lg font-medium text-gray-800">Last Name</label>
             <input id="lastName" type="text" class="w-full p-3 mt-2 border border-gray-300 rounded-lg"
-              formControlName="lastName" placeholder="Enter your last name" />
-            <div *ngIf="profileForm.controls['lastName'].invalid && profileForm.controls['lastName'].touched" class="text-red-500 text-sm mt-1">
-              Last name is required.
+                formControlName="lastName" placeholder="Enter your last name" />
+            @if (profileForm.controls['lastName'].invalid && profileForm.controls['lastName'].touched) {
+            <div class="text-red-500 text-sm mt-1">
+                Last name is required.
             </div>
-          </div>
-      
-          <div class="form-group">
+            }
+        </div>
+        <div class="form-group">
             <label for="email" class="block text-lg font-medium text-gray-800">Email Address</label>
             <input id="email" type="email" class="w-full p-3 mt-2 border border-gray-300 rounded-lg"
-              formControlName="email" placeholder="Enter your email" />
-            <div *ngIf="profileForm.controls['email'].invalid && profileForm.controls['email'].touched" class="text-red-500 text-sm mt-1">
-              <div *ngIf="profileForm.controls['email'].errors?.['required']">Email is required.</div>
-              <div *ngIf="profileForm.controls['email'].errors?.['email']">Please enter a valid email address.</div>
+                formControlName="email" placeholder="Enter your email" />
+            @if (profileForm.controls['email'].invalid && profileForm.controls['email'].touched) {
+            <div class="text-red-500 text-sm mt-1">
+                @if (profileForm.controls['email'].errors?.['required']) {
+                <div>Email is required.</div>
+                }
+                @if (profileForm.controls['email'].errors?.['email']) {
+                <div>Please enter a valid email address.</div>
+                }
             </div>
-          </div>
+            }
+        </div>
         <div class="form-group">
             <label for="phone" class="block text-lg font-medium text-gray-800">Phone Number (Optional)</label>
-            <input id="phone" type="text" class="w-full p-3 mt-2 border border-gray-300 rounded-lg"
-              formControlName="phone" placeholder="Enter your phone number (optional)" />
-            <div *ngIf="profileForm.controls['phone'].invalid && profileForm.controls['phone'].touched" class="text-red-500 text-sm mt-1">
-              Please enter a valid phone number (only numbers).
+            <input id="phone" type="number" class="w-full p-3 mt-2 border border-gray-300 rounded-lg"
+                formControlName="phone" placeholder="Enter your phone number (optional)" />
+            @if (profileForm.controls['phone'].invalid && profileForm.controls['phone'].touched) {
+            <div class="text-red-500 text-sm mt-1">
+                Please enter a valid phone number (only numbers).
             </div>
-          </div>
+            }
+        </div>
         <div class="form-group">
             <label for="profilePicture" class="block text-lg font-medium text-gray-800">Profile Picture</label>
             <div class="relative mt-2">
-              <input type="file" accept="image/*" (change)="onFileChange($event)" hidden #fileInput />
-              <div class="file-dropper p-6 border-2 border-dashed border-gray-300 rounded-md text-center cursor-pointer hover:bg-gray-100"
-                (click)="fileInput.click()">
-                <p class="text-lg text-gray-700">Click to upload a profile picture</p>
-                <div *ngIf="imagePreview" class="mt-4">
-                  <img [src]="imagePreview" alt="Image Preview" class="w-32 h-32 object-cover rounded-full mx-auto mb-4" />
-                  <p class="text-gray-600">{{ imageName }} ({{ imageSize }} KB)</p>
-                  <button type="button" (click)="removeImage()" class="text-red-600">Remove</button>
+                <input id="profilePicture" type="file" accept="image/*" (change)="onFileChange($event)" hidden
+                    #fileInput />
+                <div class="file-dropper p-6 border-2 border-dashed border-gray-300 rounded-md text-center cursor-pointer hover:bg-gray-100"
+                    (click)="fileInput.click()">
+                    <p class="text-lg text-gray-700">Click to upload a profile picture</p>
+                    @if (imagePreview) {
+                    <div class="mt-4">
+                        <img [src]="imagePreview" alt="Image Preview"
+                            class="w-32 h-32 object-cover rounded-full mx-auto mb-4" />
+                        <p class="text-gray-600">{{ imageName }} ({{ imageSize }} KB)</p>
+                        <button type="button" (click)="removeImage()" class="text-red-600">Remove</button>
+                    </div>
+                    }
                 </div>
-              </div>
             </div>
-          </div>
-        <div *ngIf="isLoader" class="inline-flex items-center justify-center w-full">
+        </div>
+        @if (isLoader) {
+        <div class="inline-flex items-center justify-center w-full">
             <button type="button"
                 class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed"
                 disabled>
@@ -85,6 +106,7 @@
                 Processing...
             </button>
         </div>
+        }
         <div class="flex justify-center space-x-4">
             <button type="submit" [disabled]="isLoader || !profileForm.valid"
                 class="w-full md:w-1/2 bg-indigo-600 text-white p-3 rounded-lg hover:bg-indigo-700 focus:outline-none focus:ring-4 focus:ring-indigo-500 transition duration-300">

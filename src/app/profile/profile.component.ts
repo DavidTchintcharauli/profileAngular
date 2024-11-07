@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
@@ -19,7 +19,8 @@ export class ProfileComponent implements OnInit{
   profilePicture = ''
   isLoader: boolean = true
 
-  constructor(private router: Router, private profileService: ProfileService) {}
+  private router = inject(Router)
+  private profileService = inject(ProfileService)
 
   ngOnInit() {
     this.profileService.getProfile().subscribe(profile => {
