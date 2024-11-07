@@ -16,4 +16,8 @@ export const routes: Routes = [
         path: 'edit-profile',
         component: EditProfileComponent
     },
+    {
+        path: '**',
+        redirectTo: 'profile'
+    }
 ];

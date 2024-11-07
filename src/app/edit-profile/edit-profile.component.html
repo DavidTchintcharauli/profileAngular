@@ -54,6 +54,21 @@
                 <div *ngIf="profileForm.controls['phone']?.errors?.['pattern']">Please enter a valid phone number (only numbers).</div>
             </div>
         </div>
+        <div class="form-group">
+            <label for="profilePicture" class="block text-lg font-medium text-gray-800">Profile Picture</label>
+            <div class="relative mt-2">
+              <input type="file" accept="image/*" (change)="onFileChange($event)" hidden #fileInput />
+              <div class="file-dropper p-6 border-2 border-dashed border-gray-300 rounded-md text-center cursor-pointer hover:bg-gray-100"
+                (click)="fileInput.click()">
+                <p class="text-lg text-gray-700">Click to upload a profile picture</p>
+                <div *ngIf="imagePreview" class="mt-4">
+                  <img [src]="imagePreview" alt="Image Preview" class="w-32 h-32 object-cover rounded-full mx-auto mb-4" />
+                  <p class="text-gray-600">{{ imageName }} ({{ imageSize }} KB)</p>
+                  <button type="button" (click)="removeImage()" class="text-red-600">Remove</button>
+                </div>
+              </div>
+            </div>
+          </div>
         <div *ngIf="isLoader" class="inline-flex items-center justify-center w-full">
             <button type="button"
                 class="inline-flex items-center px-4 py-2 font-semibold leading-6 text-sm shadow rounded-md text-white bg-indigo-500 hover:bg-indigo-400 transition ease-in-out duration-150 cursor-not-allowed"

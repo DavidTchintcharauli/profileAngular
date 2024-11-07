@@ -16,6 +16,7 @@ export class ProfileComponent implements OnInit{
   lastName = ''
   email = ''
   phone = ''
+  profilePicture = ''
   isLoader: boolean = true
 
   constructor(private router: Router, private profileService: ProfileService) {}
@@ -26,6 +27,7 @@ export class ProfileComponent implements OnInit{
       this.lastName = profile.lastName
       this.email = profile.email
       this.phone = profile.phone || ''
+      this.profilePicture = profile.profilePicture || ''
       this.isLoader = false
     })
   }
