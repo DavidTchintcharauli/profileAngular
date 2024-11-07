@@ -1,5 +1,5 @@
-import { Component, OnInit } from '@angular/core';
-import { FormGroup, FormBuilder, FormsModule, Validators  } from '@angular/forms';
+import { Component, OnInit, NgModule} from '@angular/core';
+import { FormGroup, FormBuilder, FormsModule, Validators, ReactiveFormsModule} from '@angular/forms';
 import { CommonModule } from '@angular/common';
 import { ProfileService } from '../services/profile.service';
 import { Router } from '@angular/router';
@@ -10,20 +10,13 @@ import { ToastComponent } from "../toast/toast.component"
 @Component({
   selector: 'app-edit-profile',
   standalone: true,
-  imports: [FormsModule, CommonModule, ProfileComponent, ToastComponent],
+  imports: [FormsModule, CommonModule, ProfileComponent, ToastComponent, ReactiveFormsModule],
   templateUrl: './edit-profile.component.html',
   styleUrl: './edit-profile.component.css'
 })
 export class EditProfileComponent implements OnInit {
 
-  firstName = ''
-  lastName = ''
-  email = ''
-  phone = ''
-  initialFirstName = ''
-  initialLastName = ''
-  initialEmail = ''
-  initialPhone = ''
+  profileForm: any = FormGroup;
   isLoader: boolean = false
   isFetchingData: boolean = true
 
@@ -35,18 +28,23 @@ export class EditProfileComponent implements OnInit {
   imageName = ''
   imageSize: number = 0
 
-  constructor(private profileService: ProfileService, private router: Router, private notificationService: NotificationService) { }
+  constructor(private fb: FormBuilder, private profileService: ProfileService, private router: Router, private notificationService: NotificationService) { }
 
-  ngOnInit() {
+  ngOnInit(): void {
+    this.profileForm = this.fb.group({
+      firstName: ['', [Validators.required]],
+      lastName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.pattern('^[0-9]*$')]],
+      profilePicture: [null]
+    });
     this.profileService.getProfile().subscribe(profile => {
-      this.firstName = profile.firstName
-      this.lastName = profile.lastName
-      this.email = profile.email
-      this.phone = profile.phone || ''
-      this.initialFirstName = profile.firstName
-      this.initialLastName = profile.lastName
-      this.initialEmail = profile.email
-      this.initialPhone = profile.phone || ''
+      this.profileForm.patchValue({
+        firstName: profile.firstName,
+        lastName: profile.lastName,
+        email: profile.email,
+        phone: profile.phone || ''
+      });
 
       this.isFetchingData = false
     },
@@ -76,7 +74,7 @@ export class EditProfileComponent implements OnInit {
       this.imageSize = Math.round(file.size / 1024)
       this.selectedFile = file
     } else {
-      this.notificationService.showToast('please select an image file.', 'error', 3000)
+      this.notificationService.showToast('please select an image file.', 'error', 5000)
     }
   }
 
@@ -88,35 +86,31 @@ export class EditProfileComponent implements OnInit {
   }
 
   saveProfile(): void {
-    if (this.firstName !== this.initialFirstName || this.lastName !== this.initialLastName || this.email !== this.initialEmail || this.phone !== this.initialPhone || this.selectedFile) {
+    if (this.profileForm.valid) {
       this.isLoader = true;
-      const updatedProfile = {
-        firstName: this.firstName,
-        lastName: this.lastName,
-        email: this.email,
-        phone: this.phone || null
-      };
+      const updatedProfile = this.profileForm.value;
+
+      if (this.selectedFile) {
+        updatedProfile.profilePicture = this.selectedFile;
+      }
+
       this.profileService.updateProfile(updatedProfile, this.selectedFile).subscribe(
         response => {
-          this.notificationService.showToast('Profile updated successfully!', 'success', 5000)
-          this.router.navigate(['/profile'])
-          this.isLoader = false
+          this.notificationService.showToast('Profile updated successfully!', 'success', 5000);
+          this.router.navigate(['/profile']);
+          this.isLoader = false;
         },
         error => {
-          this.notificationService.showToast('An error occurred while updating the profile. Please try again.', 'error', 5000)
-          this.isLoader = false
+          this.notificationService.showToast('An error occurred while updating the profile. Please try again.', 'error', 5000);
+          this.isLoader = false;
         }
       );
     } else {
-      this.notificationService.showToast('There are no changes to save. Please make changes or click on the Cancel button.', 'error', 5000)
+      this.notificationService.showToast('Please fix the errors in the form before saving.', 'error', 5000);
     }
   }
 
   cancelEdit() {
-    this.firstName = this.initialFirstName
-    this.lastName = this.initialLastName
-    this.email = this.initialEmail
-    this.phone = this.initialPhone
     this.router.navigate(['/profile'])
   }
 
