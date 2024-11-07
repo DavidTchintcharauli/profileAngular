@@ -9,11 +9,11 @@ import {Profile} from '../model/profile.model';
 
 export class ProfileService {
 
-  private Profile: Profile = { firstName: 'David', lastName: 'Tchintcharauli', email: 'Tchincharaulidavid@gmail.com', phone: '591161785', profilePicture: 'https://via.placeholder.com/150'}
-  private userProfileSubject = new BehaviorSubject(this.Profile)
+  private profile: Profile = { firstName: 'David', lastName: 'Tchintcharauli', email: 'Tchincharaulidavid@gmail.com', phone: '591161785', profilePicture: 'https://via.placeholder.com/150'}
+  private userProfileSubject = new BehaviorSubject(this.profile)
 
   getProfile(): Observable<Profile> {
-    return of(this.Profile).pipe(delay(1000));
+    return of(this.profile).pipe(delay(1000));
   }
 
   updateProfile(updatedProfile: Profile, profilePicture: File | null): Observable<Profile> {
@@ -22,9 +22,9 @@ export class ProfileService {
       updatedProfile.profilePicture = mockImageUrl
     }
 
-    this.Profile = updatedProfile;
-    this.userProfileSubject.next(this.Profile);
+    this.profile = updatedProfile;
+    this.userProfileSubject.next(this.profile);
 
-    return of(this.Profile).pipe(delay(1000));
+    return of(this.profile).pipe(delay(1000));
   }
 }
