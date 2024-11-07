@@ -1,36 +1,26 @@
 import { Component, inject, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { ProfileService } from '../services/profile.service';
+import { Profile } from '../model/profile.model';
+import { Observable } from 'rxjs';
+import {AsyncPipe} from '@angular/common';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, AsyncPipe],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css'
 })
 export class ProfileComponent implements OnInit{
-  firstName = ''
-  lastName = ''
-  email = ''
-  phone = ''
-  profilePicture = ''
-  isLoader: boolean = true
+  userProfile$!: Observable<Profile>;
 
   private router = inject(Router)
   private profileService = inject(ProfileService)
 
   ngOnInit() {
-    this.profileService.getProfile().subscribe(profile => {
-      this.firstName = profile.firstName
-      this.lastName = profile.lastName
-      this.email = profile.email
-      this.phone = profile.phone || ''
-      this.profilePicture = profile.profilePicture || ''
-      this.isLoader = false
-    })
+    this.userProfile$ = this.profileService.getProfile();
   }
 
   navigateToEditProfile() {

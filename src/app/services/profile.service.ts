@@ -1,6 +1,7 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of } from 'rxjs';
 import { delay } from 'rxjs';
+import {Profile} from '../model/profile.model';
 
 @Injectable({
   providedIn: 'root'
@@ -8,23 +9,22 @@ import { delay } from 'rxjs';
 
 export class ProfileService {
 
-  private userProfile = { firstName: 'David', lastName: 'Tchintcharauli', email: 'Tchincharaulidavid@gmail.com', phone: 591161785, profilePicture: 'https://via.placeholder.com/150'}
-  private userProfileSubject = new BehaviorSubject(this.userProfile)
+  private Profile: Profile = { firstName: 'David', lastName: 'Tchintcharauli', email: 'Tchincharaulidavid@gmail.com', phone: '591161785', profilePicture: 'https://via.placeholder.com/150'}
+  private userProfileSubject = new BehaviorSubject(this.Profile)
 
-  getProfile(): Observable<any> {
-    return of(this.userProfile).pipe(delay(1000));
+  getProfile(): Observable<Profile> {
+    return of(this.Profile).pipe(delay(1000));
   }
 
-  updateProfile(updatedProfile: any, profilePicture: File | null): Observable<any> {
-
+  updateProfile(updatedProfile: Profile, profilePicture: File | null): Observable<Profile> {
     if(profilePicture) {
       const mockImageUrl = URL.createObjectURL(profilePicture)
       updatedProfile.profilePicture = mockImageUrl
     }
 
-    this.userProfile = updatedProfile;
-    this.userProfileSubject.next(this.userProfile);
+    this.Profile = updatedProfile;
+    this.userProfileSubject.next(this.Profile);
 
-    return of(this.userProfile).pipe(delay(1000));
+    return of(this.Profile).pipe(delay(1000));
   }
 }

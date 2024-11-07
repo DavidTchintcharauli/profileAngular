@@ -1,10 +1,11 @@
-import { Component, OnInit, NgModule, inject} from '@angular/core';
-import { FormGroup, FormBuilder, FormsModule, Validators, ReactiveFormsModule} from '@angular/forms';
+import {Component, OnInit, NgModule, inject, DestroyRef} from '@angular/core';
+import { FormGroup, FormBuilder, FormsModule, Validators, ReactiveFormsModule, MinLengthValidator} from '@angular/forms';
 import { ProfileService } from '../services/profile.service';
 import { Router } from '@angular/router';
 import { ProfileComponent } from "../profile/profile.component"
 import { NotificationService } from '../services/notification.service'
 import { ToastComponent } from "../toast/toast.component"
+import {takeUntilDestroyed} from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-edit-profile',
@@ -31,16 +32,19 @@ export class EditProfileComponent implements OnInit {
   private profileService = inject(ProfileService);
   private router = inject(Router);
   private notificationService = inject(NotificationService);
+  private destroyRef = inject(DestroyRef);
 
   ngOnInit(): void {
     this.profileForm = this.fb.group({
       firstName: ['', [Validators.required]],
       lastName: ['', [Validators.required]],
-      email: ['', [Validators.required, Validators.email]],
-      phone: ['', [Validators.pattern('^[0-9]*$')]],
+      email: ['', [Validators.required, Validators.email, ]],
+      phone: ['', [Validators.pattern('^[0-9]{9}$')]],
       profilePicture: [null]
     });
-    this.profileService.getProfile().subscribe(profile => {
+    this.profileService.getProfile().pipe(
+      takeUntilDestroyed(this.destroyRef)
+    ).subscribe(profile => {
       this.profileForm.patchValue({
         firstName: profile.firstName,
         lastName: profile.lastName,
@@ -70,7 +74,7 @@ export class EditProfileComponent implements OnInit {
         this.imagePreview = e.target?.result as string
       }
       reader.readAsDataURL(file)
-      
+
       this.imageName = file.name
       this.imageSize = Math.round(file.size / 1024)
       this.selectedFile = file
