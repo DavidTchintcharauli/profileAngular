@@ -78,4 +78,4 @@ profileAngular/
 
 ## Demo
   **You can see a live demo of the project:** 
-    - <https://profile-angular-six.vercel.app/profile/1>
+    - <https://profile-angular-six.vercel.app>
