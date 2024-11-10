@@ -1,8 +1,9 @@
-import { Component, OnInit, OnDestroy, inject } from '@angular/core';
-import { Subscription } from 'rxjs';
-import { NotificationService } from '../services/notification.service';
-import { CommonModule } from '@angular/common';
-import { Toast } from '../model/toast.model';
+import { Component, inject } from '@angular/core'
+import { Observable  } from 'rxjs'
+import { map } from 'rxjs/operators'
+import { NotificationService } from '../services/notification.service'
+import { CommonModule } from '@angular/common'
+import { Toast } from '../model/toast.model'
 
 @Component({
   selector: 'app-toast',
@@ -11,24 +12,14 @@ import { Toast } from '../model/toast.model';
   templateUrl: './toast.component.html',
   styleUrl: './toast.component.css'
 })
-export class ToastComponent implements OnInit, OnDestroy {
-  toast: Toast | null = null
-  private toastSubscription: Subscription | null = null
-
+export class ToastComponent{
   private notificationService = inject(NotificationService)
-  
-  ngOnInit(): void {
-    this.toastSubscription = this.notificationService.toast$.subscribe((toast) => {
-      this.toast = toast
-      setTimeout(() => {
-        this.toast = null
-      }, toast!.duration)
+  toast$: Observable<Toast | null> = this.notificationService.toast$.pipe(
+    map(toast => {
+      if (toast?.duration) {
+        setTimeout(() => (this.toast$), toast.duration)
+      }
+      return toast
     })
-  }
-
-  ngOnDestroy(): void {
-    if(this.toastSubscription) {
-      this.toastSubscription.unsubscribe()
-    }
-  }
+  );
 }

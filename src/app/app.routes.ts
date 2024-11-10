@@ -5,19 +5,19 @@ import { EditProfileComponent } from './edit-profile/edit-profile.component';
 export const routes: Routes = [
     {
         path: '',
-        redirectTo: 'profile',
+        redirectTo: 'profile/1',
         pathMatch: 'full'
     },
     {
-        path: 'profile',
+        path: 'profile/:id',
         component: ProfileComponent
     },
     {
-        path: 'edit-profile',
+        path: 'edit-profile/:id',
         component: EditProfileComponent
     },
     {
         path: '**',
-        redirectTo: 'profile'
+        redirectTo: 'profile/1'
     }
-];
+]

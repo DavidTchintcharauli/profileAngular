@@ -1,4 +1,4 @@
-@if (toast) {
+@if (toast$ | async; as toast) {
 <div
   class="fixed bottom-4 left-1/2 transform -translate-x-1/2 mb-4 p-4 rounded-lg shadow-lg transition-all duration-300"
   [ngClass]="{
