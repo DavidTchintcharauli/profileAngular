@@ -53,14 +53,14 @@ profileAngular/
 
 1. **Clone the repository:**
 
-   ```bash
-   git clone https://github.com/DavidTchintcharauli/profileAngular.git
-   ```
+  ```bash
+  git clone https://github.com/DavidTchintcharauli/profileAngular.git
+  ```
    
 2. **Navigate into the project directory:**
 
   ```bash
-  cd UserProfileEditApp
+  cd profileAngular
   ```
 
 3. **Install the project dependencies:**
