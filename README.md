@@ -49,7 +49,7 @@ profileAngular/
 
 ## Installation
 
-**To get started with the project locally, follow these steps:
+**To get started with the project locally, follow these steps:**
 
 1. **Clone the repository:**
 
@@ -68,9 +68,9 @@ profileAngular/
   npm install
   ```
 ## Development Server
-  1. **Run the development server using the following command:
+  1. **Run the development server using the following command:**
   
   ```bash
   ng serve
   ```
-  2. Navigate to http://localhost:4200/ in your browser.
+  2. **Navigate to http://localhost:4200/ in your browser.**
