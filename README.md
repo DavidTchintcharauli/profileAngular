@@ -1,9 +1,5 @@
 # profileAngular
 
-A modern Angular application that allows users to edit and manage their profile information. This project uses Angular's reactive forms for efficient form handling, along with features for file uploads and dynamic form validation.
-
-> Built with [Angular](https://angular.io/) and [Tailwind CSS](https://tailwindcss.com/) for a seamless user experience.
-
 ## Table of Contents
 
 - [Overview](#overview)
