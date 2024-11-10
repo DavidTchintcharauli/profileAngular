@@ -7,6 +7,7 @@
 - [File Structure](#file-structure)
 - [Installation](#installation)
 - [Development Server](#development-server)
+- [Demo](#demo)
 
 ---
 
@@ -74,3 +75,7 @@ profileAngular/
   ng serve
   ```
   2. **Navigate to http://localhost:4200/ in your browser.**
+
+## Demo
+  **You can see a live demo of the project:** 
+    - <https://profile-angular-six.vercel.app/profile/1>
