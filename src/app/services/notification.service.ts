@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core'
-import { BehaviorSubject, Observable, timer  } from 'rxjs'
+import { BehaviorSubject, Observable, timer, take  } from 'rxjs'
 import { Toast } from '../model/toast.model'
 import { tap } from 'rxjs/operators'
 
@@ -17,8 +17,12 @@ export class NotificationService {
     this.toastSubject.next(toast)
 
     timer(duration)
-    .pipe(tap(() => this.clearToast()))
-    .subscribe()
+      .pipe(
+        tap(() => this.clearToast()),
+        take(1)
+      )
+      .subscribe();
+    
   }
 
   clearToast(): void {
