@@ -21,7 +21,9 @@ export class NotificationService {
         tap(() => this.clearToast()),
         take(1)
       )
-      .subscribe();
+      .subscribe({
+        error: (err) => console.error('Error clearing toast:', err)
+      });
     
   }
 

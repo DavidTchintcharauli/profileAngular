@@ -15,16 +15,6 @@
         </button>
     </div>
     }
-    @if (successMessage) {
-    <div class="bg-green-100 border-l-4 border-green-500 text-green-700 p-4 mb-4">
-        <p class="font-semibold">{{ successMessage }}</p>
-    </div>
-    }
-    @if (errorMessage) {
-    <div class="bg-red-100 border-l-4 border-red-500 text-red-700 p-4 mb-4">
-        <p class="font-semibold">{{ errorMessage }}</p>
-    </div>
-    }
     <form [formGroup]="profileForm" (ngSubmit)="saveProfile()" class="space-y-6">
         <div class="form-group">
             <label for="firstName" class="block text-lg font-medium text-gray-800">First Name</label>

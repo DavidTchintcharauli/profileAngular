@@ -28,9 +28,6 @@ export class EditProfileComponent implements OnInit {
   isLoader = false
   isFetchingData = true
 
-  successMessage = ''
-  errorMessage = ''
-
   selectedFile: File | null = null
   imagePreview: String | null = null
   imageName = ''
@@ -57,45 +54,35 @@ export class EditProfileComponent implements OnInit {
   }
 
   private fetchProfile(): void {
-    const id = Number(this.route.snapshot.paramMap.get("id"))
+    const id = this.getProfileId()
     this.profileService
       .getProfile(id)
       .pipe(takeUntilDestroyed(this.destroyRef))
-      .subscribe(
-        (profile) => {
-          if (profile) {
-            populateForm(this.profileForm, profile)
-            this.currentProfilePicture = profile.profilePicture
-            this.initialProfileData = { ...profile }
-            this.isFetchingData = false
-          } else {
-            this.notificationService.showToast('Profile not found.', 'error', 5000)
-          }
+      .subscribe({
+        next: (profile) => {
+          populateForm(this.profileForm, profile);
+          this.currentProfilePicture = profile.profilePicture;
+          this.initialProfileData = { ...profile };
+          this.isFetchingData = false;
         },
-        () => this.notificationService.showToast('Failed to load profile data.', 'error', 5000)
-      )
+        error: () => this.notificationService.showToast('Failed to load profile data.', 'error', 5000),
+      });
   }
 
   onFileChange(event: Event): void {
     const file = (event.target as HTMLInputElement).files?.[0]
-    if (file) {
-      if (isValidImage(file, this.MAX_IMAGE_SIZE_BYTES)){
-        getImagePreview(file)
-          .then((preview) => {
-            this.imagePreview = preview as string
-            this.selectedFile = file
-            this.imageSize = Math.round(file.size / 1024)
-          })
-          .catch(() => {
-            this.notificationService.showToast('Error previewing the file.', 'error', 5000)
-          })
-        } else {
-          this.notificationService.showToast(
-            `Invalid file. Please upload an image of size less than ${this.MAX_IMAGE_SIZE_MB} MB.`,
-            'error',
-            5000
-          )
-        }
+    if (file && isValidImage(file, this.MAX_IMAGE_SIZE_BYTES)) {
+      getImagePreview(file)
+        .then((preview) => {
+          this.imagePreview = preview as string
+          this.selectedFile = file
+          this.imageSize = Math.round(file.size / 1024)
+        })
+        .catch(() => {
+          this.notificationService.showToast('Error previewing the file.', 'error', 5000)
+        })
+    } else {
+      this.notificationService.showToast(`Invalid file. Please upload an image of size less than ${this.MAX_IMAGE_SIZE_MB} MB.`, 'error', 5000)
     }
   }
 
@@ -106,49 +93,53 @@ export class EditProfileComponent implements OnInit {
     this.imageSize = 0
   }
 
-  hasChanges(): boolean {
-    const hasFileChange = this.selectedFile !== null
-    return hasProfileChanges(this.profileForm.value, this.initialProfileData, hasFileChange)
-  }
-
   saveProfile(): void {
-    if (!this.hasChanges()) {
-      this.notificationService.showToast(
-        'No changes detected. Please make changes to save.',
-        'error',
-        5000
-      )
+    if (!this.profileForm.valid || !this.hasChanges()) {
+      this.notificationService.showToast('No changes detected. Please make changes to save.', 'error', 5000)
       return
     }
 
-    if (this.profileForm.valid) {
-      this.isLoader = true
-      const id = Number(this.route.snapshot.paramMap.get('id'))
-      const updatedProfile = {
-        ...this.profileForm.value,
-        id,
-        profilePicture: this.selectedFile || this.currentProfilePicture,
-      }
-
-      this.profileService
-        .updateProfile(updatedProfile, this.selectedFile)
-        .pipe(takeUntilDestroyed(this.destroyRef))
-        .subscribe(
-          () => {
-            this.notificationService.showToast('Profile updated successfully!', 'success', 1000)
-            this.router.navigate(['/profile', id])
-          },
-          () => {
-            this.notificationService.showToast('An error occurred while updating the profile. Please try again.', 'error', 5000)
-          }
-        )
-        .add(() => (this.isLoader = false))
-    } else {
-      this.notificationService.showToast('There are no changes. Please make some changes to save or click on cancel.', 'error', 5000)
+    this.isLoader = true
+    const id = this.getProfileId();
+    const updatedProfile = {
+      ...this.profileForm.value,
+      id,
+      profilePicture: this.selectedFile || this.currentProfilePicture,
     }
+
+    this.profileService
+      .updateProfile(updatedProfile, this.selectedFile)
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe({
+        next: () => {
+          this.notificationService.showToast('Profile updated successfully!', 'success', 1000)
+          this.router.navigate(['/profile', id])
+        },
+        error: () => this.notificationService.showToast('An error occurred while updating the profile. Please try again.', 'error', 5000)
+      })
+      .add(() => (this.isLoader = false))
   }
 
   cancelEdit() {
     this.router.navigate(['/profile'])
+  }
+
+  private getProfileId(): number {
+    const id = Number(this.route.snapshot.paramMap.get('id'))
+    if (isNaN(id)) {
+      this.notificationService.showToast('Invalid profile ID.', 'error', 5000);
+      this.router.navigate(['/']);
+      return 0;
+    }
+    return id;
+  }
+
+  private hasChanges(): boolean {
+    const hasFileChange = this.selectedFile !== null;
+    return hasProfileChanges(
+      this.profileForm.value,
+      this.initialProfileData,
+      hasFileChange
+    );
   }
 }

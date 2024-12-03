@@ -1,4 +1,4 @@
-import { Injectable, inject } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable, of, throwError } from 'rxjs';
 import { delay, map } from 'rxjs/operators';
 import { Profile } from '../model/profile.model';
@@ -22,8 +22,6 @@ export class ProfileService {
   private userProfileSubject = new BehaviorSubject<Profile[]>([...this.profiles])
   profiles$ = this.userProfileSubject.asObservable()
 
-  // constructor() {}
-
   getProfile(id: number): Observable<Profile> {
     return of(this.profiles.find(p => p.id === id)).pipe(
       delay(500),
@@ -43,10 +41,9 @@ export class ProfileService {
       return throwError(() => new Error(`Profile with ID ${updatedProfile.id} not found`))
     }
 
-    const updatedPicture = profilePicture
-      ? this.generateMockImageUrl(profilePicture) : updatedProfile.profilePicture || 'https://via.placeholder.com/150'
+    const updatedPicture = profilePicture ? this.generateMockImageUrl(profilePicture) : updatedProfile.profilePicture || 'https://via.placeholder.com/150'
 
-    const updated = { ...updatedProfile, profilePicture: updatedPicture}
+    const updated = { ...updatedProfile, profilePicture: updatedPicture }
     this.profiles[index] = updated
     this.userProfileSubject.next([...this.profiles])
 

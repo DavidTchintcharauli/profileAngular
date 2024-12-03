@@ -1,5 +1,5 @@
 export function isValidImage(file: File, maxSizeBytes: number): boolean {
-   return file.type.startsWith('image/') && file.size <= maxSizeBytes
+    return file.type.startsWith('image/') && file.size <= maxSizeBytes
 }
 
 export function getImagePreview(file: File): Promise<string | ArrayBuffer | null> {

@@ -7,7 +7,7 @@ export function hasProfileChanges(
 ): boolean {
     if (!initialProfileData) return false
 
-    const {firstName, lastName, email, phone} = formValue
+    const { firstName, lastName, email, phone } = formValue
 
     return (
         firstName !== initialProfileData.firstName ||

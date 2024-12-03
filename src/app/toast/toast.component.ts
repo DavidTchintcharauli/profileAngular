@@ -12,7 +12,5 @@ import { Toast } from '../model/toast.model'
   styleUrl: './toast.component.css'
 })
 export class ToastComponent {
-  private notificationService = inject(NotificationService)
-
-  toast$: Observable<Toast | null> = this.notificationService.toast$;
+  toast$: Observable<Toast | null> = inject(NotificationService).toast$;
 }
