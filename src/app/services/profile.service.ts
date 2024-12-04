@@ -27,7 +27,7 @@ export class ProfileService {
       delay(500),
       map(profile => {
         if (!profile) {
-          throw new Error(`profile with ID ${id} not found`)
+          throw throwError(() => new Error(`profile with ID ${id} not found`))
         }
         return profile
       })
